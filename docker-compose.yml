@@ -1,0 +1,45 @@
+version: "3"
+services:
+  postgres:
+    image: elestio/postgres:15
+    shm_size: 1g
+    restart: always
+    environment:
+      POSTGRES_DB: vectoradmin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${ADMIN_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+      TS_TUNE_MAX_CONNS: 100
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  server:
+    image: chromadb/chroma:latest
+    volumes:
+      - ./chroma-data:/chroma/chroma
+    command: "--workers 1 --host 0.0.0.0 --port 8000 --proxy-headers --log-config chromadb/log_config.yml --timeout-keep-alive 30"
+    environment:
+      - ANONYMIZED_TELEMETRY=False
+      - ALLOW_RESET=True
+      - IS_PERSISTENT=True
+    restart: always
+    ports:
+      - "172.17.0.1:15396:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  vector-admin:
+    image: ghcr.io/mintplex-labs/vector-admin:${SOFTWARE_VERSION_TAG}
+    volumes:
+      - "./.env:/app/backend/.env"
+    ports:
+      - "172.17.0.1:41100:3001"
+      - "3355:3355"
+      - "8288:8288"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
