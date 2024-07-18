@@ -33,6 +33,7 @@ services:
 
   vector-admin:
     image: ghcr.io/mintplex-labs/vector-admin:${SOFTWARE_VERSION_TAG}
+    restart: always
     volumes:
       - "./.env:/app/backend/.env"
     ports:
