@@ -39,28 +39,31 @@ Use the following curl command to create a collection:
 
 ## Adding Text to a Collection
 
-Once you have created a collection, you can add text to it. Use the following curl command to add text to your collection:
+Once you have created a collection, you can add text to it.
 
-    curl -X POST https://[CI_CD_DOMAIN]/api/v1/collections/test_collection/items \
+Before adding, you'll have to get the collection ID. You can list all collections with the following command and find the ID:
+
+    curl -X 'GET' \
+        'https://[CI_CD_DOMAIN]/api/v1/collections' \
         -u root:[ADMIN_PASSWORD] \
-        -H "Content-Type: application/json" \
-        -d '{
-            "texts": ["Your first text here","Your second text here"],
-            "metadatas": [{"key": "value"}],
-            "ids": ["id1", "id2"]
-            }'
+        -H 'accept: application/json'
 
-## Querying the Collection
+Use the following curl command to add text to your collection:
 
-To query the collection, use the following curl command:
-
-    curl -X POST https://[CI_CD_DOMAIN]/api/v1/collections/test_collection/query \
+    curl -X 'POST' \
+        'https://[CI_CD_DOMAIN]/api/v1/collections/<COLLECTION_ID>/add' \
         -u root:[ADMIN_PASSWORD] \
-        -H "Content-Type: application/json" \
+        -H 'accept: application/json' \
+        -H 'Content-Type: application/json' \
         -d '{
-            "query_texts": ["Your query text here"],
-            "n_results": 5
-            }'
+            "documents": [
+                "This is a document about pineapple",
+                "This is a document about oranges"
+            ],
+            "ids": [
+                "id1", "id2"
+            ]
+         }'
 
 Additional Information
-For more detailed information and advanced usage, refer to the <a href="https://docs.trychroma.com/getting-started" target="_blank">ChromaDB Documentation</a>.
+For more detailed information and advanced usage, refer to the <a href="https://[CI_CD_DOMAIN]/docs" target="_blank">ChromaDB Documentation</a>.
