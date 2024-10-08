@@ -11,15 +11,15 @@ Deploy ChromaDB server with CI/CD on Elestio
 
 # Once deployed ...
 
-You can open ChromaDB here:
+You can open ChromaDB API here:
 
-    URL: https://[CI_CD_DOMAIN]
+    Endpoint: https://[CI_CD_DOMAIN]
     login: "admin"
     password: "[ADMIN_PASSWORD]"
 
-You can open pgAdmin here:
+You can open Vector Admin UI here:
 
-    URL: "https://[CI_CD_DOMAIN]:12513"
+    URL: "https://[CI_CD_DOMAIN]:44751"
     login: "[ADMIN_EMAIL]"
     password: "[ADMIN_PASSWORD]"
 
